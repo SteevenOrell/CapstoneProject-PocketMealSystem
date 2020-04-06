@@ -38,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         // Hristo UI Navigation Code
         // Register Button on Register Page
         reg = findViewById(R.id.btnSaveEdit);
+
         // REGISTER page fields needed to register user
         usernameField = findViewById(R.id.txtEditUsername);
         emailField = findViewById(R.id.txtEmailEdit);
@@ -48,6 +49,10 @@ public class RegisterActivity extends AppCompatActivity {
         cityField = findViewById(R.id.txtcityEdit);
         checkAgreement = (CheckBox)findViewById(R.id.checkBoxAgree);
 //      postalField = findViewById(R.id.txtDigitEdit);
+
+
+//      postalField = findViewById(R.id.txtDigitEdit);
+
 
         // User inputs must be:
 
