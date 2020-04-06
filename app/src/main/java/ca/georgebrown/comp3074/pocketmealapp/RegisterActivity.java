@@ -50,12 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
         checkAgreement = (CheckBox)findViewById(R.id.checkBoxAgree);
 //      postalField = findViewById(R.id.txtDigitEdit);
 
-
-//      postalField = findViewById(R.id.txtDigitEdit);
-
-
-        // User inputs must be:
-
         reg.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -66,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = passField.getText().toString();
                 String passwordConfirm = passConfirmField.getText().toString();
 
+                // User inputs must be:
                 // Sanitized
                 if(checkAgreement.isChecked() == true) {
                     if (passField.length() > 7 && password.equals(passwordConfirm)) {

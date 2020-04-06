@@ -59,121 +59,91 @@ public class DBHelper {
     }
 
     public void insertUser(final String username, final User u) {
-
-        reffUserManager.orderByKey().equalTo(username)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-
+        reffUserManager.orderByKey().equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                         Log.d("===", String.valueOf(dataSnapshot.exists()));
                         if (dataSnapshot.exists()) {
                             Log.d("Insert:", "User already exists");
-
-                        } else {
+                        }
+                        else {
                             //  Food f = new Food("","","");
                             //       u.foodList.add(f);
-
                             reffUserManager.child(username).setValue(u);
-
                             Log.d("Insert:", "New User insert successfully");
                         }
-
                         // Log.d("===", String.valueOf(b));
                         // user = childSnapshot.getValue(User.class);
-
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
-
     }
 
     public void updateUserInfo(final String username, final String newData, final String columnToBeUpdated) {
+        reff.getReference("UserManager/"+username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        reff.getReference("UserManager/"+username)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                if (dataSnapshot.exists()) {
+                    if (columnToBeUpdated.equals("email")) {
+                        DatabaseReference specificReff = reff.getReference("UserManager/" + username);
+                        specificReff.child(columnToBeUpdated).setValue(newData);
+                        user.updateEmail(newData);
+                        Log.d("User Info Update", "User Information updated successfully");
+                    }
+                    else if(columnToBeUpdated.equals("password")){
 
-                    @Override
-
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                        if (dataSnapshot.exists()) {
-
-                            if (columnToBeUpdated.equals("email")) {
-
-                                DatabaseReference specificReff = reff.getReference("UserManager/" + username);
-                                specificReff.child(columnToBeUpdated).setValue(newData);
-
-                                user.updateEmail(newData);
-                                Log.d("User Info Update", "User Information updated successfully");
-                            }
-
-                          else if(columnToBeUpdated.equals("password")){
-
-                                user.updatePassword(newData);
-                                Log.d("User Info Update", "User Information updated successfully");
-                            }
-                           else if(columnToBeUpdated.equals("city_postalcode")){
-                              String lastChar = String.valueOf(newData.charAt(newData.length()-1));
-                              String firstChar = String.valueOf(newData.charAt(0));
-                                DatabaseReference specificReff = reff.getReference("UserManager/" + username);
-                                String arr_city_pos[]=  dataSnapshot.child("city_postalcode").toString().split("_",2);
-                                if(lastChar.equals("_")){
-                                    specificReff.child(columnToBeUpdated).setValue(newData+arr_city_pos[1]);
-                                    Log.d("User Info Update", "User Information updated successfully");
-                                }
-                                else if(firstChar.equals("_")){
-                                    specificReff.child(columnToBeUpdated).setValue(arr_city_pos[0]+newData);
-                                    Log.d("User Info Update", "User Information updated successfully");
-                                }
-                                else{
-
-                                    specificReff.child(columnToBeUpdated).setValue(newData);
-                                    Log.d("User Info Update", "User Information updated successfully");
-                                }
-
-                            }
-
-                          else if (columnToBeUpdated.equals("first_name") || columnToBeUpdated.equals("last_name")  || columnToBeUpdated.equals("bio")) {
-                                DatabaseReference specificReff = reff.getReference("UserManager/" + username);
-                                specificReff.child(columnToBeUpdated).setValue(newData);
-                                Log.d("User Info Update", "User Information updated successfully");
-
-                            }
+                        user.updatePassword(newData);
+                        Log.d("User Info Update", "User Information updated successfully");
+                    }
+                    else if(columnToBeUpdated.equals("city_postalcode")){
+                        String lastChar = String.valueOf(newData.charAt(newData.length()-1));
+                        String firstChar = String.valueOf(newData.charAt(0));
+                        DatabaseReference specificReff = reff.getReference("UserManager/" + username);
+                        String arr_city_pos[]=  dataSnapshot.child("city_postalcode").toString().split("_",2);
+                        if(lastChar.equals("_")){
+                            specificReff.child(columnToBeUpdated).setValue(newData+arr_city_pos[1]);
+                            Log.d("User Info Update", "User Information updated successfully");
                         }
-                        //make sure city_postalcode is in lowercase extremely important
+                        else if(firstChar.equals("_")){
+                            specificReff.child(columnToBeUpdated).setValue(arr_city_pos[0]+newData);
+                            Log.d("User Info Update", "User Information updated successfully");
+                        }
+                        else{
 
-                        else {
-                            Log.d("Data:", "Data doesn't exist");
-
+                            specificReff.child(columnToBeUpdated).setValue(newData);
+                            Log.d("User Info Update", "User Information updated successfully");
                         }
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    else if (columnToBeUpdated.equals("first_name") || columnToBeUpdated.equals("last_name")  || columnToBeUpdated.equals("bio")) {
+                        DatabaseReference specificReff = reff.getReference("UserManager/" + username);
+                        specificReff.child(columnToBeUpdated).setValue(newData);
+                        Log.d("User Info Update", "User Information updated successfully");
                     }
-                });
+                }
+                //make sure city_postalcode is in lowercase extremely important
+                else {
+                    Log.d("Data:", "Data doesn't exist");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
+            }
+        });
         //update email,  not lat and lon and id
     }
 
     public void deleteUser(final String email) {
-
         reffUserManager.orderByChild("email").equalTo(email)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
 
                     @Override
-
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                         Log.d("===", String.valueOf(dataSnapshot.exists()));
                         if (dataSnapshot.exists()) {
                             String username = dataSnapshot.getKey().toString();
@@ -181,10 +151,7 @@ public class DBHelper {
                             user.delete();
                             reffUserManager.child(username).removeValue();
                         } else {
-
                             Log.d("Delete User ", "User does not exit");
-
-
                         }
                     }
 
@@ -193,50 +160,34 @@ public class DBHelper {
                         Log.d("error", databaseError.toString());
                     }
                 });
-
     }
 
     public void addFood(final String username, final String foodname, final Food f1) {
-        reffUserManager.orderByKey().equalTo(username)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        reffUserManager.orderByKey().equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("===", String.valueOf(dataSnapshot.exists()));
+                if (dataSnapshot.exists()) {
+                    DatabaseReference specificReff = reff.getReference("UserManager/" + username + "/FoodList");
+                    specificReff.child(foodname).setValue(f1);
+                    Log.d("FoodInsert:", "Food insert successfully");
+                }
+                else {
+                    Log.d("FoodInsert:", "Food already exists or user not in DB");
+                }
+            }
 
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        Log.d("===", String.valueOf(dataSnapshot.exists()));
-                        if (dataSnapshot.exists()) {
-
-                            DatabaseReference specificReff = reff.getReference("UserManager/" + username + "/FoodList");
-
-                            specificReff.child(foodname).setValue(f1);
-
-
-                            Log.d("FoodInsert:", "Food insert successfully");
-
-                        } else {
-
-                            Log.d("FoodInsert:", "Food already exists or user not in DB");
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+            }
+        });
     }
 
     public void updateFood(final String username, final String newData, final String columnToBeUpdated, final String Foodname) {
-
-
-        reff.getReference("UserManager/" + username + "/FoodList/" + Foodname)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-
+        reff.getReference("UserManager/" + username + "/FoodList/" + Foodname).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                         if (dataSnapshot.exists()) {
                             //update email,  not lat and lon and id
                           if (columnToBeUpdated.equals("category") || columnToBeUpdated.equals("expiry_date") ||
@@ -244,14 +195,12 @@ public class DBHelper {
                                 DatabaseReference specificReff = reff.getReference("UserManager/" + username + "/FoodList/" + Foodname);
                                 specificReff.child(columnToBeUpdated).setValue(newData);
                                 Log.d("Food Update", "Food updated");
-
                             }
                         }
-//make sure city_postalcode is in lowercase extremely important
+                        // Make sure city_postalcode is in lowercase extremely important
 
                         else {
                             Log.d("Update Food:", "Data doesn't exist");
-
                         }
                     }
 
@@ -260,19 +209,12 @@ public class DBHelper {
 
                     }
                 });
-
-
     }
 
     public void updateFoodPoint(final String email, final String foodname, final double lon, final double lat) {
-
-        reffUserManager.orderByChild("email").equalTo(email)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-
+        reffUserManager.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                         Log.d("===", String.valueOf(dataSnapshot.exists()));
                         if (dataSnapshot.exists() && dataSnapshot.child("foodList/"+foodname).exists()) {
                             String username = dataSnapshot.getKey().toString();
@@ -280,11 +222,10 @@ public class DBHelper {
                             specificReff.child("userPoint/latitude").setValue(lat);
                             specificReff.child("userPoint/longitude").setValue(lon);
                             Log.d("Food Point Update", "Food point updated");
-
-                        } else {
+                        }
+                        else {
                             Log.d("Data:", "Data doesn't exist");
                         }
-
                     }
 
                     @Override
@@ -295,20 +236,15 @@ public class DBHelper {
     }
 
     public void deleteFood(final String username, final String foodname) {
-
         reff.getReference("UserManager/" + username + "/FoodList/" + foodname).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 if (dataSnapshot.exists()) {
-
                     DatabaseReference specReff = reff.getReference("UserManager/" + username + "/FoodList");
                     specReff.child(foodname).removeValue();
                     Log.d("Delete Food", "Food deleted...");
-
-                } else {
-
-
+                }
+                else {
                     Log.d("Delete Update", "Food or User doesn't exit");
                 }
             }
