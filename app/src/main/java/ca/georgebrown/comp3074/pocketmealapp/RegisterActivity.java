@@ -46,13 +46,13 @@ public class RegisterActivity extends AppCompatActivity {
         fnameField = findViewById(R.id.txtfNameEdit);
         lnameField = findViewById(R.id.txtLNameEdit);
         cityField = findViewById(R.id.txtcityEdit);
-<<<<<<< HEAD
+
         postalField = findViewById(R.id.txtDigitEdit);
         checkAgreement = (CheckBox)findViewById(R.id.checkBoxAgree);
 
-=======
+
 //      postalField = findViewById(R.id.txtDigitEdit);
->>>>>>> 70e6df1e59ed1cca068d82044324505d9fe23a16
+
 
         // User inputs must be:
 
