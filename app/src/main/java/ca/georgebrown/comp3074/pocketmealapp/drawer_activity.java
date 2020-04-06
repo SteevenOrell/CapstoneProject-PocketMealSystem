@@ -54,7 +54,7 @@ public class drawer_activity extends AppCompatActivity {
     private TextView navUserEmail;
     private TextView navUserName;
     private ImageView navUserImage;
-
+    public static Activity activity=null;
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -65,6 +65,7 @@ public class drawer_activity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        activity = this;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -81,7 +82,7 @@ public class drawer_activity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         if (LoginActivity.currentUser != null) {
-            updateNavHeader();
+            // updateNavHeader();
         }
 
     }
@@ -111,17 +112,19 @@ public class drawer_activity extends AppCompatActivity {
             navUserEmail.setText(LoginActivity.currentUser.getEmail());
             navUserName.setText(LoginActivity.currentUser.getDisplayName());
 
-//            LoginActivity.mStorageRef.child("pics/").child(LoginActivity.mAuth.getInstance().getCurrentUser().getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                @Override
-//                public void onSuccess(Uri uri) {
-//                    // GET IMAGE AND PLACE IT INTO navUserImage
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(drawer_activity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-//                }
-//            });
+            LoginActivity.mStorageRef.child("pics/").child(LoginActivity.mAuth.getInstance().getCurrentUser().getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Toast t = new Toast(getApplicationContext());
+                    //LoginActivity.dbHelper.getProfilePic(this, getApplicationContext(), navUserImage, uri, t);
+                    // GET IMAGE AND PLACE IT INTO navUserImage
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(drawer_activity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 

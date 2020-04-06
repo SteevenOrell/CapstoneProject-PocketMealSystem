@@ -25,7 +25,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Hristo UI Navigation Code Variables
     private EditText usernameField, emailField, fnameField, lnameField, cityField, postalField, passField, passConfirmField;
-    private CheckBox checkAgreement;
     private Button reg;
 
     @Override
@@ -38,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         // Hristo UI Navigation Code
         // Register Button on Register Page
         reg = findViewById(R.id.btnSaveEdit);
+
         // REGISTER page fields needed to register user
         usernameField = findViewById(R.id.txtEditUsername);
         emailField = findViewById(R.id.txtEmailEdit);
@@ -49,6 +49,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         postalField = findViewById(R.id.txtDigitEdit);
         checkAgreement = (CheckBox)findViewById(R.id.checkBoxAgree);
+
+
+//      postalField = findViewById(R.id.txtDigitEdit);
 
 
 //      postalField = findViewById(R.id.txtDigitEdit);
@@ -121,21 +124,6 @@ public class RegisterActivity extends AppCompatActivity {
 //                else {
 //                    Toast.makeText(RegisterActivity.this, "Please provide the first two characters of your postal code.", Toast.LENGTH_LONG).show();
 //                }
-            }
-        });
-
-
-
-        checkAgreement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(checkAgreement.isChecked()) {
-                    Toast.makeText(RegisterActivity.this, "You are accepting our Policy of Terms of Agreement", Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(getApplicationContext(), AgreementTermsActivity.class);
-                    startActivity(i);
-                }
-
             }
         });
     }
