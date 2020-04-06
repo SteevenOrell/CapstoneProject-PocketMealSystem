@@ -21,7 +21,7 @@ public class MyFoodDetailActivity extends AppCompatActivity {
         final TextView txtVFoodType = findViewById(R.id.textVFoodName);
         final EditText txtVDescript = findViewById(R.id.textVDescription);
         final EditText txtAllergies = findViewById(R.id.textVAllergies);
-       // TextView txtVUsername = findViewById(R.id.textVUsernamePro);
+        // TextView txtVUsername = findViewById(R.id.textVUsernamePro);
         final EditText txtVExpiry = findViewById(R.id.textVAllergies);
 
         Button btnEditFood = findViewById(R.id.btnSaveEditFood);
@@ -34,7 +34,7 @@ public class MyFoodDetailActivity extends AppCompatActivity {
         txtVFoodType.setText(str_FoodName);
         txtAllergies.setText(str_Allergies);
         txtVDescript.setText(str_Description);
-     //   txtVUsername.setText(LoginActivity.currentUser.getDisplayName());
+        // txtVUsername.setText(LoginActivity.currentUser.getDisplayName());
         txtVExpiry.setText(str_Expiry);
 
         final Map<String,String> commandFood = new HashMap<>();
